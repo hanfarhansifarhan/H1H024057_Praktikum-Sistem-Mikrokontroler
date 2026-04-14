@@ -51,7 +51,7 @@ Keuntungan:
 Penyederhanaan Perangkat Keras: Tidak memerlukan resistor eksternal tambahan pada breadboard, sehingga meminimalisir penggunaan kabel dan komponen.
 Stabilitas Sinyal: Menghilangkan kondisi floating (sinyal mengambang) yang dapat menyebabkan Arduino menerima input palsu akibat gangguan elektromagnetik di sekitar rangkaian.
 Logika Sederhana: Memungkinkan koneksi langsung tombol ke Ground, di mana kondisi ditekan akan terbaca sebagai LOW
-##3. Jika salah satu LED segmen tidak menyala, apa saja kemungkinan penyebabnya dari sisi hardware maupun software?
+## 3. Jika salah satu LED segmen tidak menyala, apa saja kemungkinan penyebabnya dari sisi hardware maupun software?
 Jawaban: Identifikasi masalah dapat ditinjau dari dua aspek:
 
 Aspek Hardware: * Putusnya jalur kabel jumper atau resistor pada segmen tertentu.
