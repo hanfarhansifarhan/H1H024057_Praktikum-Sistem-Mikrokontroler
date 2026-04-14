@@ -1,12 +1,14 @@
-Pertanyaan Praktikum 2.54
-2. Apa yang terjadi jika nilai num lebih dari 15?
+## Pertanyaan Praktikum 2.54
+## 2. Apa yang terjadi jika nilai num lebih dari 15?
 Jawaban: Apabila variabel num memiliki nilai melebihi 15, maka program akan mencoba mengakses indeks di luar batas array yang telah ditentukan (out of bounds). Hal ini menyebabkan sistem mengambil data dari alamat memori yang tidak relevan, sehingga Seven Segment akan menampilkan pola LED yang acak, tidak beraturan, atau tidak sesuai dengan karakter heksadesimal yang seharusnya.
-3. Apakah program ini menggunakan common cathode atau common anode? Jelaskan alasannya!
+## 3. Apakah program ini menggunakan common cathode atau common anode? Jelaskan alasannya!
 Jawaban: Program ini menggunakan jenis Common Cathode.
 Alasan: Berdasarkan logika pada kode program, instruksi digitalWrite memberikan nilai HIGH (1) untuk menyalakan segmen LED. Pada komponen Common Cathode, seluruh katoda segmen terhubung ke Ground, sehingga diperlukan tegangan positif (HIGH) dari pin output Arduino untuk menciptakan aliran arus yang menyalakan LED. Jika menggunakan Common Anode, maka logika yang diperlukan adalah LOW untuk menyalakan segmen.
-4. Modifikasi program agar tampilan berjalan dari F ke 0 dan berikan penjelasan disetiap baris kode nya dalam bentuk README.md!
+## 4. Modifikasi program agar tampilan berjalan dari F ke 0 dan berikan penjelasan disetiap baris kode nya dalam bentuk README.md!
 Jawaban:
 
+#### Kode Program
+```cpp
 // Array pola heksadesimal untuk tampilan 0-F (Common Cathode)
 byte segmentCodes[] = {
   0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 
@@ -35,11 +37,13 @@ void displayDigit(byte code) {
     digitalWrite(bit + 2, state);   // Mengirimkan logika ke pin (pin 2 untuk bit 0, dst)
   }
 }
-Pertanyaan Praktikum 2.6.4
-1. Gambarkan rangkaian schematic yang digunakan pada percobaan!
+```
+
+## Pertanyaan Praktikum 2.6.4
+## 1. Gambarkan rangkaian schematic yang digunakan pada percobaan!
 Jawaban: Gambar Rangkaian pada folder Dokumentasi
 
-2. Mengapa pada push button digunakan mode INPUT_PULLUP pada Arduino Uno? Apa keuntungannya dibandingkan rangkaian biasa?
+## 2. Mengapa pada push button digunakan mode INPUT_PULLUP pada Arduino Uno? Apa keuntungannya dibandingkan rangkaian biasa?
 Jawaban: Mode INPUT_PULLUP mengaktifkan resistor internal di dalam mikrokontroler yang menarik tegangan pin ke arah 5V secara default.
 
 Keuntungan:
@@ -47,7 +51,7 @@ Keuntungan:
 Penyederhanaan Perangkat Keras: Tidak memerlukan resistor eksternal tambahan pada breadboard, sehingga meminimalisir penggunaan kabel dan komponen.
 Stabilitas Sinyal: Menghilangkan kondisi floating (sinyal mengambang) yang dapat menyebabkan Arduino menerima input palsu akibat gangguan elektromagnetik di sekitar rangkaian.
 Logika Sederhana: Memungkinkan koneksi langsung tombol ke Ground, di mana kondisi ditekan akan terbaca sebagai LOW
-3. Jika salah satu LED segmen tidak menyala, apa saja kemungkinan penyebabnya dari sisi hardware maupun software?
+##3. Jika salah satu LED segmen tidak menyala, apa saja kemungkinan penyebabnya dari sisi hardware maupun software?
 Jawaban: Identifikasi masalah dapat ditinjau dari dua aspek:
 
 Aspek Hardware: * Putusnya jalur kabel jumper atau resistor pada segmen tertentu.
@@ -57,9 +61,10 @@ Aspek Software:
 Pin terkait belum dikonfigurasi sebagai OUTPUT pada fungsi setup().
 Terdapat kesalahan nilai bit pada array segmentCodes yang merepresentasikan segmen tersebut.
 Kesalahan penulisan nomor pin dalam fungsi perulangan digitalWrite
-Modifikasi Program: Increment & Decrement Counter
+## Modifikasi Program: Increment & Decrement Counter
 Modifikasi ini mengimplementasikan dua tombol untuk menambah (increment) dan mengurangi (decrement) angka heksadesimal yang ditampilkan.
-Kode Program (Arduino Sketch)
+## Kode Program (Arduino Sketch)
+```cpp
 /*
  * Modifikasi Tugas 2.6.4: Dual Button Counter
  */
@@ -113,3 +118,4 @@ void displayDigit(byte code) {
     digitalWrite(bit + 2, state);
   }
 }
+```
