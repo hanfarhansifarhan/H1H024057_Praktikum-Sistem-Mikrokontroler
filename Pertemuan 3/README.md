@@ -65,3 +65,82 @@ void loop() {
     }
   }
 }
+4. Delay vs Millis
+
+delay()
+
+Program berhenti sementara
+Tidak responsif
+
+millis()
+
+Tidak menghentikan program
+Tetap bisa menerima input
+Bagian B: I2C Communication
+1. Cara Kerja I2C
+Jalur	Fungsi
+SCL	Clock
+SDA	Data
+
+Arduino = Master
+LCD = Slave (0x27)
+
+2. Potensiometer
+3 pin: VCC, GND, Signal
+Jika terbalik:
+Tidak rusak
+Hanya arah berubah
+3. Program UART + I2C
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+const int pinPot = A0;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.init();
+  lcd.backlight();
+}
+
+void loop() {
+  int adcVal = analogRead(pinPot);
+  float voltage = adcVal * (5.0 / 1023.0);
+  int percent = map(adcVal, 0, 1023, 0, 100);
+  int barLength = map(adcVal, 0, 1023, 0, 16);
+
+  Serial.print("ADC: ");
+  Serial.println(adcVal);
+
+  Serial.print("Volt: ");
+  Serial.print(voltage);
+  Serial.println(" V");
+
+  Serial.print("Persen: ");
+  Serial.print(percent);
+  Serial.println("%");
+
+  Serial.println("-----");
+
+  lcd.setCursor(0, 0);
+  lcd.print("ADC:");
+  lcd.print(adcVal);
+  lcd.print(" ");
+  lcd.print(percent);
+  lcd.print("%");
+
+  lcd.setCursor(0, 1);
+  for (int i = 0; i < 16; i++) {
+    if (i < barLength) lcd.print((char)255);
+    else lcd.print(" ");
+  }
+
+  delay(500);
+}
+Data Pengamatan
+ADC	Volt (V)	Persen (%)
+1	0.005	0%
+21	0.10	2%
+49	0.24	4%
+74	0.36	7%
+96	0.47	9%
