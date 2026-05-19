@@ -1,13 +1,12 @@
-
 # Percobaan 6A — External Interrupt
 
-## 1. Jelaskan bagaimana tombol bisa mengubah kondisi LED menggunakan interrupt!
+## 1. Jelaskan proses bagaimana tombol dapat mengubah kondisi LED menggunakan interrupt!
 
-Ketika tombol ditekan, pin interrupt pada Arduino akan membaca perubahan sinyal dari HIGH ke LOW karena memakai mode `FALLING`. Setelah perubahan terdeteksi, Arduino langsung menjalankan ISR (*Interrupt Service Routine*) dan menghentikan sementara program utama. Di dalam ISR tersebut, nilai variabel `ledState` dibalik sehingga LED dapat berubah kondisi menjadi menyala atau mati. Setelah ISR selesai dijalankan, program kembali ke proses utama.
+Saat tombol ditekan, pin interrupt pada Arduino akan mendeteksi perubahan sinyal dari HIGH menjadi LOW karena memakai mode `FALLING`. Interrupt kemudian menghentikan sementara program utama dan menjalankan ISR (*Interrupt Service Routine*). Di dalam ISR, variabel `ledState` diubah sehingga kondisi LED dapat berubah menjadi ON atau OFF. Setelah ISR selesai dijalankan, program kembali melanjutkan loop utama.
 
-## 2. Apa kegunaan `attachInterrupt()` pada program?
+## 2. Apa fungsi `attachInterrupt()` pada program tersebut?
 
-Fungsi `attachInterrupt()` dipakai untuk menghubungkan pin interrupt dengan fungsi ISR yang akan dijalankan saat kondisi tertentu terjadi. Selain itu, fungsi ini juga menentukan jenis interrupt yang digunakan seperti `RISING`, `FALLING`, `CHANGE`, maupun `LOW`.
+Fungsi `attachInterrupt()` dipakai untuk menghubungkan pin interrupt dengan ISR yang akan dijalankan ketika terjadi kondisi tertentu. Fungsi ini juga menentukan mode interrupt seperti `RISING`, `FALLING`, `CHANGE`, ataupun `LOW`.
 
 Contoh:
 
@@ -15,13 +14,13 @@ Contoh:
 attachInterrupt(digitalPinToInterrupt(2), tombolInterrupt, FALLING);
 ```
 
-## 3. Kenapa `delay()` dan `Serial.print()` tidak dianjurkan di dalam ISR?
+## 3. Mengapa pada ISR tidak disarankan menggunakan `delay()` dan `Serial.print()`?
 
-Karena saat ISR berjalan, program utama akan berhenti sementara. Jika di dalam ISR menggunakan `delay()` atau `Serial.print()`, proses interrupt menjadi lebih lama sehingga performa sistem bisa menurun, respon menjadi lambat, bahkan interrupt lain dapat terlewat.
+Karena selama ISR berjalan, program utama akan berhenti sementara. Jika menggunakan `delay()` atau `Serial.print()`, ISR menjadi lebih lama sehingga sistem bisa menjadi lambat, kurang responsif, atau menyebabkan interrupt lain tidak terbaca.
 
 ## 4. Apa fungsi keyword `volatile` pada variabel `ledState`?
 
-Keyword `volatile` digunakan supaya compiler selalu mengambil nilai terbaru dari variabel tersebut karena nilainya dapat berubah sewaktu-waktu di dalam ISR. Jika tidak memakai `volatile`, compiler bisa saja menggunakan nilai lama yang tersimpan sehingga hasil program menjadi tidak sesuai.
+Keyword `volatile` digunakan supaya compiler selalu membaca nilai terbaru dari variabel karena nilainya bisa berubah sewaktu-waktu di dalam ISR. Tanpa `volatile`, compiler dapat menyimpan nilai lama sehingga program tidak berjalan dengan semestinya.
 
 ## 5. Modifikasi Program Menggunakan Mode Interrupt Lain
 
@@ -29,36 +28,36 @@ Keyword `volatile` digunakan supaya compiler selalu mengambil nilai terbaru dari
 
 **Analisis**
 
-Mode `RISING` akan aktif ketika sinyal berubah dari LOW menjadi HIGH. Pada penggunaan `INPUT_PULLUP`, interrupt biasanya terjadi saat tombol dilepas sehingga perubahan kondisi LED terjadi ketika tombol sudah tidak ditekan.
+Mode `RISING` aktif ketika sinyal berubah dari LOW ke HIGH. Pada tombol dengan `INPUT_PULLUP`, interrupt biasanya terjadi saat tombol dilepas sehingga LED berubah kondisi ketika tombol sudah dilepas.
 
 ### b. Mode CHANGE
 
 **Analisis**
 
-Mode `CHANGE` bekerja setiap ada perubahan sinyal, baik dari HIGH ke LOW maupun LOW ke HIGH. Karena itu LED bisa berubah kondisi dua kali, yaitu saat tombol ditekan dan saat dilepas, sehingga terlihat lebih sensitif.
+Mode `CHANGE` aktif setiap terjadi perubahan sinyal HIGH ke LOW maupun LOW ke HIGH. Akibatnya LED bisa berubah dua kali saat tombol ditekan dan dilepas sehingga LED terlihat lebih sensitif.
 
 ### c. Mode LOW
 
 **Analisis**
 
-Mode `LOW` akan terus menjalankan ISR selama kondisi pin berada di LOW. Akibatnya LED bisa berubah sangat cepat atau terlihat berkedip terus selama tombol masih ditekan.
+Mode `LOW` akan terus menjalankan ISR selama pin berada dalam kondisi LOW. Akibatnya LED dapat berkedip sangat cepat atau berubah terus selama tombol ditekan.
 
 # Percobaan 6B — Timer Menggunakan millis()
 
-## 1. Jelaskan cara kerja fungsi `millis()` pada program!
+## 1. Jelaskan bagaimana fungsi `millis()` bekerja pada program tersebut!
 
-Fungsi `millis()` digunakan untuk menghitung lama waktu sejak Arduino mulai dinyalakan dalam satuan milidetik. Pada program, nilai waktu sekarang dibandingkan dengan waktu sebelumnya untuk menentukan kapan LED harus berubah kondisi.
+Fungsi `millis()` menghitung waktu sejak Arduino dinyalakan dalam satuan milidetik. Program kemudian membandingkan waktu sekarang dengan waktu sebelumnya untuk menentukan kapan LED harus berubah kondisi.
 
-## 2. Apa perbedaan utama `delay()` dan `millis()`?
+## 2. Apa perbedaan utama antara `delay()` dan `millis()`?
 
-`delay()` akan menghentikan sementara seluruh proses program sesuai waktu yang ditentukan. Sedangkan `millis()` memungkinkan program tetap berjalan sambil menghitung waktu sehingga lebih fleksibel dan efisien.
+`delay()` menghentikan seluruh program selama waktu tertentu, sedangkan `millis()` memungkinkan program tetap berjalan sambil menghitung waktu sehingga penggunaannya lebih efisien.
 
-## 3. Mengapa `millis()` disebut metode non-blocking?
+## 3. Mengapa metode `millis()` disebut non-blocking?
 
-Karena penggunaan `millis()` tidak menghentikan jalannya program utama. Arduino masih bisa menjalankan proses lain sambil tetap menghitung interval waktu.
+Karena `millis()` tidak menghentikan jalannya program utama. Arduino tetap dapat menjalankan proses lain sambil menghitung interval waktu.
 
 ## 4. Modifikasi Program Dua LED Tanpa delay()
 
 **Analisis**
 
-Program memakai dua timer berbeda menggunakan `millis()` sehingga kedua LED dapat berkedip dengan jeda waktu yang berbeda tanpa perlu memakai `delay()`. LED pertama berkedip setiap 1 detik, sedangkan LED kedua berkedip setiap 500 milidetik.
+Program menggunakan dua timer berbeda dengan `millis()` sehingga kedua LED dapat berkedip dengan interval berbeda tanpa memakai `delay()`. LED pertama berkedip setiap 1 detik dan LED kedua setiap 500 ms.
